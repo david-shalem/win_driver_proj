@@ -1,0 +1,88 @@
+;
+; printer_driver.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USBDevice
+ClassGuid={88BAE032-5A81-49f0-BC3D-A4FF138216D6}
+Provider=%ManufacturerName%
+CatalogFile=printer_driver.cat
+DriverVer=
+PnpLockDown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+printer_driver_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+printer_driver.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%printer_driver.DeviceDesc%=printer_driver_Device, USB\VID_vvvv&PID_pppp
+
+[printer_driver_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+printer_driver.sys
+
+[printer_driver_Device.NT.HW]
+AddReg=printer_driver_AddReg
+
+[printer_driver_AddReg]
+; By default, USBDevice class uses iProduct descriptor to name the device in
+; Device Manager on Windows 8 and higher.
+; Uncomment for this device to use %DeviceName% on Windows 8 and higher:
+;HKR,,FriendlyName,,%printer_driver.DeviceDesc%
+
+;-------------- Service installation
+[printer_driver_Device.NT.Services]
+AddService = printer_driver,%SPSVCINST_ASSOCSERVICE%, printer_driver_Service_Inst
+
+; -------------- printer_driver driver install sections
+[printer_driver_Service_Inst]
+DisplayName    = %printer_driver.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\printer_driver.sys
+
+;
+;--- printer_driver_Device Coinstaller installation ------
+;
+
+[printer_driver_Device.NT.CoInstallers]
+AddReg=printer_driver_Device_CoInstaller_AddReg
+CopyFiles=printer_driver_Device_CoInstaller_CopyFiles
+
+[printer_driver_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[printer_driver_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[printer_driver_Device.NT.Wdf]
+KmdfService =  printer_driver, printer_driver_wdfsect
+[printer_driver_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+ClassName="Universal Serial Bus devices"
+DiskName = "printer_driver Installation Disk"
+printer_driver.DeviceDesc = "printer_driver Device"
+printer_driver.SVCDESC = "printer_driver Service"
+REG_MULTI_SZ = 0x00010000

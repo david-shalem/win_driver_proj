@@ -1,0 +1,17 @@
+hide process:
+
+input - < process name (< 15) >
+
+search var in process: 
+
+input - < val to search (= 4) >< amount of sections (= 2) > amount of section*< section name (= 8)> 
+output - amount of sections*(< amount of locations found in the section (= 1) > amount of locations*< location (= 4)>) 
+
+
+
+
+
+
+
+
+

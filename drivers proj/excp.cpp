@@ -1,0 +1,35 @@
+#include "excp.h"
+
+void handleExcp(_EXCEPTION_POINTERS* per)
+{
+    dprint("Exception has been thrown.\nExceptions message: ");
+    dprint(excpDiscriptor(per->ExceptionRecord->ExceptionCode));
+}
+
+const char* excpDiscriptor(const unsigned int code)
+{
+    
+    switch (code) {
+    case STATUS_ACCESS_VIOLATION:         return "EXCEPTION_ACCESS_VIOLATION";
+    case STATUS_ARRAY_BOUNDS_EXCEEDED:    return "EXCEPTION_ARRAY_BOUNDS_EXCEEDED";
+    case STATUS_BREAKPOINT:               return "EXCEPTION_BREAKPOINT";
+    case STATUS_DATATYPE_MISALIGNMENT:    return "EXCEPTION_DATATYPE_MISALIGNMENT";
+    case STATUS_FLOAT_DENORMAL_OPERAND:     return "EXCEPTION_FLT_DENORMAL_OPERAND";
+    case STATUS_FLOAT_DIVIDE_BY_ZERO:       return "EXCEPTION_FLT_DIVIDE_BY_ZERO";
+    case STATUS_FLOAT_INEXACT_RESULT:       return "EXCEPTION_FLT_INEXACT_RESULT";
+    case STATUS_FLOAT_INVALID_OPERATION:    return "EXCEPTION_FLT_INVALID_OPERATION";
+    case STATUS_FLOAT_OVERFLOW:             return "EXCEPTION_FLT_OVERFLOW";
+    case STATUS_FLOAT_STACK_CHECK:          return "EXCEPTION_FLT_STACK_CHECK";
+    case STATUS_FLOAT_UNDERFLOW:            return "EXCEPTION_FLT_UNDERFLOW";
+    case STATUS_ILLEGAL_INSTRUCTION:      return "EXCEPTION_ILLEGAL_INSTRUCTION";
+    case STATUS_IN_PAGE_ERROR:            return "EXCEPTION_IN_PAGE_ERROR";
+    case STATUS_INTEGER_DIVIDE_BY_ZERO:       return "EXCEPTION_INT_DIVIDE_BY_ZERO";
+    case STATUS_INTEGER_OVERFLOW:             return "EXCEPTION_INT_OVERFLOW";
+    case STATUS_INVALID_DISPOSITION:      return "EXCEPTION_INVALID_DISPOSITION";
+    case STATUS_NONCONTINUABLE_EXCEPTION: return "EXCEPTION_NONCONTINUABLE_EXCEPTION";
+    case STATUS_PRIVILEGED_INSTRUCTION:         return "EXCEPTION_PRIV_INSTRUCTION";
+    case STATUS_SINGLE_STEP:              return "EXCEPTION_SINGLE_STEP";
+    case STATUS_STACK_OVERFLOW:           return "EXCEPTION_STACK_OVERFLOW";
+    default: return "UNKNOWN EXCEPTION";
+    }
+}
